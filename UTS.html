@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Map Lombok Tengah</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="asset/leaflet/leaflet.css">
+	<script src="asset/leaflet/leaflet.js"></script>
+	<script src="json/Kabupaten.js"></script>
+	<style >
+		html, body{
+			height: 100%;
+			width: 100%;
+			margin: 0;
+			padding: 0;
+		}
+		#map {
+			width: 100%;
+			height: 100%;
+		}
+	</style>
+</head>
+<body>
+<div id="map"></div>
+<script >
+
+	
+	var mapIcon = L.Icon.extend({
+	    iconSize:     [32, 37]
+	});
+	var kantorcamatIcon = new mapIcon({iconUrl: 'icon/office-building.png'}),
+	    kesehatanIcon = new mapIcon({iconUrl: 'icon/hospital-building.png'}),
+	    tamanbermainIcon = new mapIcon({iconUrl: 'icon/playground.png'})
+	   	pemerintahanIcon = new mapIcon({iconUrl: 'icon/office-building.png'});
+	   	keamananIcon = new mapIcon({iconUrl: 'icon/police.png'});
+	   	wadukIcon = new mapIcon({iconUrl: 'icon/dam.png'});
+
+	var kc1 = L.marker([-8.6128812, 116.3103311],{icon: kantorcamatIcon}).bindPopup('Kantor Camat Batukliang');
+	var kc2 = L.marker([-8.588949, 116.3245473],{icon: kantorcamatIcon}).bindPopup('Kantor Camat Batukliang Utara');
+	var kc3 = L.marker([-8.6942821, 116.3995881],{icon: kantorcamatIcon}).bindPopup('Kantor Camat Janapria');
+	var kc4 = L.marker([-8.6525193, 116.1979991],{icon: kantorcamatIcon}).bindPopup('Kantor Camat Jonggat');
+	var kc5 = L.marker([-8.6343426, 116.3548378],{icon: kantorcamatIcon}).bindPopup('Kantor Camat Kopang');
+	var kc6 = L.marker([-8.7237617, 116.2390471],{icon: kantorcamatIcon}).bindPopup('Kantor Camat Praya');
+	var kc7 = L.marker([-8.742301, 116.2410837],{icon: kantorcamatIcon}).bindPopup('Kantor Camat Praya Barat');
+	var kc8 = L.marker([-8.7385415, 116.2015728],{icon: kantorcamatIcon}).bindPopup('Kantor Camat Praya Barat Daya');
+	var kc9 = L.marker([-8.7340447, 116.316331],{icon: kantorcamatIcon}).bindPopup('Kantor Camat Praya Tengah');
+	var kc10 = L.marker([-8.7614541, 116.3561055],{icon: kantorcamatIcon}).bindPopup('Kantor Camat Praya Timur');
+	var kc11 = L.marker([-8.6190565, 116.2517066],{icon: kantorcamatIcon}).bindPopup('Kantor Camat Pringgarata');
+	var kc12 = L.marker([-8.8004563, 116.292598],{icon: kantorcamatIcon}).bindPopup('Kantor Camat Pujut');
+	
+	var Kantorcamat = L.layerGroup([kc1, kc2, kc3, kc4, kc5, kc6, kc7, kc8, kc9, kc10, kc11,kc12]);
+
+
+	var ks1 = L.marker([-8.7019832, 116.2958626],{icon: kesehatanIcon}).bindPopup('RSUD Praya');
+	var ks2 = L.marker([-8.7060444, 116.2726082],{icon: kesehatanIcon}).bindPopup('Puskesmas Praya');
+	
+	var Kesehatan = L.layerGroup([ks1, ks2 ]);
+
+
+	var tb1 = L.marker([-8.7045539, 116.2712998],{icon: tamanbermainIcon}).bindPopup('Lapangan Muhajirin');
+	var tb2 = L.marker([-8.7139106, 116.2869397],{icon: tamanbermainIcon}).bindPopup('Taman Biao');
+	var tb3 = L.marker([-8.7141343, 116.2639882],{icon: tamanbermainIcon}).bindPopup('Tonjeng Beru Smart Garden');
+
+	var tamanbermain = L.layerGroup([tb1, tb2, tb3 ]);
+
+
+	var pemerintahan = L.marker([-8.7061917, 116.2691035],{icon: pemerintahanIcon}).bindPopup('Kantor Bupati Lombok Tengah');
+
+	var pemerintahan = L.layerGroup([pemerintahan])
+
+
+	var keamanan = L.marker([-8.7093713, 116.2793799],{icon: keamananIcon}).bindPopup('Polres Lombok Tengah');
+
+	var keamanan = L.layerGroup([keamanan])
+
+	var waduk1 = L.marker([-8.7320897, 116.2726254],{icon: wadukIcon}).bindPopup('Bendungan Batujai');
+	var waduk2 = L.marker([-8.7575494, 116.1880415],{icon: wadukIcon}).bindPopup('Bendungan Pengge');
+
+	var waduk = L.layerGroup([waduk1, waduk2 ]);
+
+	
+	var mbAttr = 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+			'<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+			'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+		mbUrl = 'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw';
+
+	var streets = L.tileLayer(mbUrl, {id: 'mapbox.streets',attribution: mbAttr});
+
+	
+	var map = L.map('map', {
+		center : [-8.6815714, 115.9888662],
+		zoom: 10,
+		layers: [streets]
+	});
+
+	
+	var baseLayer = {
+		"Streets": streets
+	};
+
+	var batukliang = L.geoJSON([batukliang], {
+		style: function (feature) {
+			return feature.properties && feature.properties.style;
+		}
+	});
+	var batukliang_utara = L.geoJSON([batukliang_utara], {
+		style: function (feature) {
+			return feature.properties && feature.properties.style;
+		}
+
+	});
+	var janapria = L.geoJSON([janapria], {
+		style: function (feature) {
+			return feature.properties && feature.properties.style;
+		}
+
+	});
+	var jonggat = L.geoJSON([jonggat], {
+		style: function (feature) {
+			return feature.properties && feature.properties.style;
+		}
+
+	});
+	var kopang = L.geoJSON([kopang], {
+		style: function (feature) {
+			return feature.properties && feature.properties.style;
+		}
+
+	});
+	var praya = L.geoJSON([praya], {
+		style: function (feature) {
+			return feature.properties && feature.properties.style;
+		}
+
+	});
+	var prayabarat = L.geoJSON([prayabarat], {
+		style: function (feature) {
+			return feature.properties && feature.properties.style;
+		}
+
+	});
+	var prayabaratdaya = L.geoJSON([prayabaratdaya], {
+		style: function (feature) {
+			return feature.properties && feature.properties.style;
+		}
+
+	});
+	var prayatengah = L.geoJSON([prayatengah], {
+		style: function (feature) {
+			return feature.properties && feature.properties.style;
+		}
+
+	});
+	var prayatimur  = L.geoJSON([prayatimur ], {
+		style: function (feature) {
+			return feature.properties && feature.properties.style;
+		}
+
+	});
+	var pringgarata = L.geoJSON([pringgarata ], {
+		style: function (feature) {
+			return feature.properties && feature.properties.style;
+		}
+
+	});
+	var pujut = L.geoJSON([pujut], {
+		style: function (feature) {
+			return feature.properties && feature.properties.style;
+		}
+
+	});
+	
+	var overlays = {
+		"Kantor Camat" 	: Kantorcamat,
+		"Kesehatan" : Kesehatan,
+		"Taman Bermain "	: tamanbermain,
+		"Pemerintahan" : pemerintahan,
+		"Keamanan"	: keamanan,
+		"Waduk"	: waduk,
+		"Kecamatan Batukliang" : batukliang,
+		"Kecamatan Batukliang Utara" : batukliang_utara,
+		"Kecamatan Janapria" : janapria,
+		"Kecamatan Jonggat" : jonggat,
+		"Kecamatan Kopang" : kopang,
+		"Kecamatan Praya" : praya,
+		"Kecamatan Praya Barat " : prayabarat,
+		"Kecamatan Praya Barat Daya" : prayabaratdaya,
+		"Kecamatan Praya Tengah" : prayatengah,
+		"Kecamatan Praya Timur" : prayatimur,
+		"Kecamatan Pringgarata" : pringgarata,
+		"Kecamatan Pujut" : pujut
+		
+		
+	};
+
+	
+	L.control.layers(baseLayer, overlays).addTo(map);
+
+
+	
+	L.geoJSON([Kabupaten], {
+		style: function (feature) {
+			return feature.properties && feature.properties.style;
+		}
+	}).addTo(map);
+
+</script>
+</body>
+</html>
